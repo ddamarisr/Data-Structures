@@ -33,7 +33,9 @@ public class Administrator {
     public void addFlight(Airline airline, Plane plane) throws IOException, ParseException{
         
         String origen=UI.recorder("la ciudad de origen");
+        if(!destinations.contains(origen))destinations.add(origen);
         String destination=UI.recorder("la ciudad de destino");
+        if(!destinations.contains(destination))destinations.add(destination);
         int number=Integer.parseInt(UI.recorder("el número de vuelo"));
         Date date=sdf.parse(UI.recorder("La fecha del vuelo como dd/mm/aaaa"));
         Flight newFlight=new Flight(origen, destination, number, date, plane, airline);

@@ -27,7 +27,6 @@ import java.util.LinkedList;
 public class UI {
 
     public static String welcome() throws IOException, FileNotFoundException, ParseException {
-        
         try {
             WriteAndRead.readFlights();
         } catch (Exception e) {
@@ -39,7 +38,7 @@ public class UI {
         try {
             WriteAndRead.readPassangers();
         } catch (Exception e) {
-        }
+        }        
 
         System.out.println("Bienvenido al Terminal. Por favor indique el número correspondiente a su rol: " + "\n");
         System.out.println("1-------- Administrador");
@@ -87,6 +86,7 @@ public class UI {
         System.out.println("3-------- Buscar Vuelos");
         System.out.println("4-------- Agregar Destino");
         System.out.println("5-------- Eliminar Destino");
+        System.out.println("6-------- Mostrar Destinos");
         System.out.println("8-------- Salir");
         
         int opcion = verification(8);
@@ -104,16 +104,27 @@ public class UI {
                 break;
             case 3:
                 searchFlights(defo);
-  
+                System.out.println("\nIngrese 1 para volver al menú principal: ");
+                UI.verification(1);
+                UI.AdminMenu(defo);
                 break;  
             case 4:
                 defo.addDestination();
+                System.out.println("\nIngrese 1 para volver al menú principal: ");
+                UI.verification(1);
+                UI.AdminMenu(defo);
                 break;   
             case 5:
-               
+                defo.deleteDestination();
+                System.out.println("\nIngrese 1 para volver al menú principal: ");
+                UI.verification(1);
+                UI.AdminMenu(defo);
                 break;
             case 6:
-                
+                for(String i:destinations) System.out.println(i);
+                System.out.println("\nIngrese 1 para volver al menú principal: ");
+                UI.verification(1);
+                UI.AdminMenu(defo);
                 break;
             case 7:
             
@@ -171,8 +182,9 @@ public class UI {
 */
     public static void showFlights(Administrator defo) {
         for (Flight i : flights) {
-            System.out.println(i);
+            System.out.println(i.toString());
         }
+        
     }
 
     public static void searchFlights(Administrator defo) throws IOException, ParseException {
@@ -307,7 +319,7 @@ public class UI {
         System.out.println("Por favor ingrese el numero correspondiente a la opción que desea llevar a cabo: "+ "\n");
 
         System.out.println("1-------- Iniciar Reservación"); // Vamos a eliminar y añadir datos. No queda de otra que usar listas enlazadas para los vuelos
-        System.out.println("8-------- Salir");
+        System.out.println("2-------- Salir");
         
         int opcion = verification(2);
         
@@ -331,7 +343,11 @@ public class UI {
         System.out.println("Escoja un destino: ");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String input = reader.readLine();
-        if(!destinations.contains(input)) System.out.println("No se ha encontrado ningún destino con el nombre especificado");
+        for(String i: destinations) System.out.println(i);
+        if(!destinations.contains(input)) {
+            System.out.println("No se ha encontrado ningún destino con el nombre especificado");
+            UserMenu(user);
+        }
         else{
             System.out.println("Ingrese el número del vuelo que desea reservar: ");
             for(Flight i:flights){
@@ -354,7 +370,6 @@ public class UI {
                 System.out.println("El dato proporcionado no es correcto");
                 reserve(user);
             }
-            
         }
     }
     

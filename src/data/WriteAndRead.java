@@ -35,10 +35,10 @@ public class WriteAndRead {
     private static SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
     
     public static void writeFlights()throws FileNotFoundException, IOException{
-        FileOutputStream file = new FileOutputStream(new File("vuelos.txt"));
+        FileOutputStream file = new FileOutputStream(new File("flights.txt"));
         BufferedWriter write = new BufferedWriter(new OutputStreamWriter(file));
         for(Flight i: flights){
-            write.write(i.getAirline()+" "+i.getDestination()+ " " + i.getOrigin()+" "+ i.getDate().toString());
+            write.write(i.getAirline()+" "+i.getOrigin()+ " " + i.getDestination()+" "+ Integer.toString(i.getNumberOfFlight())+" "+ i.getDateFormat());
             write.newLine();
         }
         write.close();  
@@ -74,10 +74,10 @@ public class WriteAndRead {
     //lectura de archivos txt
     public static void readFlights()throws FileNotFoundException, IOException, ParseException{
         String destine;
-        BufferedReader bf = new BufferedReader(new FileReader("destinos.txt"));
+        BufferedReader bf = new BufferedReader(new FileReader("flights.txt"));
         while ((destine = bf.readLine())!=null) {
             String[] data = destine.split(" ");
-            Flight newFlight=new Flight(data[1], data[2], Integer.parseInt(data[3]), sdf.parse(data[4]), trialPlane, airline1);
+            Flight newFlight=new Flight(data[2], data[3], Integer.parseInt(data[4]), sdf.parse(data[5]), trialPlane, airline1);
             flights.add(newFlight);
         }
     }
@@ -97,7 +97,7 @@ public class WriteAndRead {
     
     public static void readDestinations() throws FileNotFoundException, IOException{
         String destine;
-        BufferedReader bf = new BufferedReader(new FileReader("destinos.txt"));
+        BufferedReader bf = new BufferedReader(new FileReader("destinations.txt"));
         while ((destine = bf.readLine())!=null) {
             destinations.add(destine);
         }

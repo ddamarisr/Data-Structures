@@ -50,7 +50,10 @@ public class Flight implements Serializable {
     public String getAirline() {
         return airline.getName();
     }
-   
+    
+    public String getDateFormat(){
+    return Integer.toString(date.getDate())+"/"+Integer.toString(date.getMonth()+1)+"/"+Integer.toString(date.getYear());
+    }
     public Date getDate(){
         return date;
     }
@@ -78,12 +81,10 @@ public class Flight implements Serializable {
     public void setDate(Date Date) {
         this.date = Date;
     }
-    
-    
 
     @Override
     public String toString() {
-        return "Flight{" + ", numberOfFlight=" + numberOfFlight + "origin=" + origin + ", destination=" + destination + ", Date=" + date + '}';
+        return "Vuelo{" + "Número de vuelo = " + numberOfFlight + ", origen=" + origin + ", destino=" + destination + ", fecha=" + date + '}';
     }
     
 
