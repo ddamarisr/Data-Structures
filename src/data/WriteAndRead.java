@@ -5,26 +5,17 @@
  */
 package data;
 
-import static businessLogic.ProTest.airline1;
-import static businessLogic.ProTest.destinations;
-import static businessLogic.ProTest.flights;
-import static businessLogic.ProTest.trialPlane;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import businessLogic.Administrator;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
-import ui.UI;
 
 /**
  *
@@ -34,16 +25,17 @@ public class WriteAndRead {
     
     private static SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
     
-    public static void writeFlights()throws FileNotFoundException, IOException{
+    public static void writeFlights(Administrator defo)throws FileNotFoundException, IOException{
+        LinkedList<Flight> flights=defo.getAirline().getFlights();
         FileOutputStream file = new FileOutputStream(new File("flights.txt"));
-        BufferedWriter write = new BufferedWriter(new OutputStreamWriter(file));
-        for(Flight i: flights){
-            write.write(i.getAirline()+" "+i.getOrigin()+ " " + i.getDestination()+" "+ Integer.toString(i.getNumberOfFlight())+" "+ i.getDateFormat());
-            write.newLine();
+        ObjectOutputStream out = new ObjectOutputStream(file);
+        for(Flight flight: flights){
+            out.writeObject(flight);
         }
-        write.close();  
+        out.close();  
+        file.close();
     }
-    
+  /*  
     public static void writePassengers(Flight flight)throws FileNotFoundException, IOException{
         FileOutputStream file = new FileOutputStream(new File(Integer.toString(flight.getNumberOfFlight())+".txt"));
         BufferedWriter write = new BufferedWriter(new OutputStreamWriter(file));
@@ -59,8 +51,8 @@ public class WriteAndRead {
         }
         write.close(); 
     }
-    
-    public static void writeDestinations() throws FileNotFoundException, IOException{
+    */
+  /*  public static void writeDestinations() throws FileNotFoundException, IOException{
         FileOutputStream file = new FileOutputStream(new File("destinations.txt"));
         BufferedWriter write = new BufferedWriter(new OutputStreamWriter(file));
         for(String i: destinations){
@@ -68,20 +60,40 @@ public class WriteAndRead {
             write.newLine();
         }
         write.close();      
-    }
+    }*/
     
     
     //lectura de archivos txt
-    public static void readFlights()throws FileNotFoundException, IOException, ParseException{
-        String destine;
-        BufferedReader bf = new BufferedReader(new FileReader("flights.txt"));
-        while ((destine = bf.readLine())!=null) {
-            String[] data = destine.split(" ");
-            Flight newFlight=new Flight(data[2], data[3], Integer.parseInt(data[4]), sdf.parse(data[5]), trialPlane, airline1);
-            flights.add(newFlight);
+    public static LinkedList<Flight> reader(String path) throws FileNotFoundException,
+            IOException, ClassNotFoundException {
+        
+        LinkedList<Flight> flights=new LinkedList();
+
+        // The following call can throw a FileNotFoundException or an IOException.9
+        // Since this is probably better dealt with in the calling function, 
+        // reader is made to throw these exceptions instead.
+        
+        FileInputStream fi = new FileInputStream(new File(path)); //archivo
+        
+        ObjectInputStream oi = new ObjectInputStream(fi);//objeto
+
+        while (true) {
+            try {
+                // Read the next object from the stream. If there is none, the
+                // EOFException will be thrown.
+                // This call might also throw a ClassNotFoundException, which can be passed
+                // up or handled here.
+                Flight flight= (Flight) oi.readObject();
+                flights.add(flight);
+                
+            } catch (EOFException e) {
+                // If there are no more objects to read, return what we have.
+                oi.close();
+                return flights;
+            } 
         }
     }
-    
+ /*
     public static void readPassangers()throws FileNotFoundException, IOException{
         String destine;
         for(Flight i: flights){
@@ -94,12 +106,12 @@ public class WriteAndRead {
             }
         }
     }
-    
-    public static void readDestinations() throws FileNotFoundException, IOException{
+   */ 
+  /*  public static void readDestinations() throws FileNotFoundException, IOException{
         String destine;
         BufferedReader bf = new BufferedReader(new FileReader("destinations.txt"));
         while ((destine = bf.readLine())!=null) {
             destinations.add(destine);
         }
-    }
+    }*/
 }

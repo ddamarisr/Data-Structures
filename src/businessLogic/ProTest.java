@@ -5,68 +5,75 @@
  */
 package businessLogic;
 import data.Airline;
-import data.Flight;
-import data.Passenger;
-import data.Plane;
-import java.io.BufferedReader;
+import interfaceFolder.Controlador;
+import interfaceFolder.Inicio;
+import interfaceFolder.Singleton;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import javafx.application.Application;
+import javafx.stage.Stage;
 import ui.UI;
 
 /**
  *
  * @author danie
  */
-public class ProTest {
-    public static LinkedList<String> destinations = new LinkedList<>();
-    public static LinkedList<Flight> flights = new LinkedList<>();
+public class ProTest extends Application {
     
-    public static Plane trialPlane = new Plane(1);
-    public static Airline airline1 = new Airline("Aerolineas PAYASO", 123456);
 
     public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException, ParseException {
-
-         //Acá creamos los objetos aerolínea
+        /*
+        Airline airline1 = new Airline("Aerolineas PAYASO", 123456);//Acá creamos los objetos aerolínea. Los vuelos se cargan automáticamente
+        
+        Administrator defo = new Administrator(airline1);
 
         String role = UI.welcome();
 
         if (role.equals("Admin")) {
-            Administrator defo = new Administrator(); //Sólo instancia si está en el rol de administrador
             UI.AdminMenu(defo);
-        } else if(role.equals("User")) {
+        } else if (role.equals("User")) {
             User user = new User();
-            UI.UserMenu(user);
-        } else if (role.equals("Bench")){
+            UI.UserMenu(user, defo);
+        } else if (role.equals("Bench")) {
             System.out.println("INSERTAR EN LA MITAD");
-            
-            Bench.insertion(10000,"10_mil_datos.txt");
+
+            Bench.insertion(10000, "10_mil_datos.txt");
             Bench.insertion(100000, "100_mil_datos.txt");
             Bench.insertion(1000000, "1million.txt");
-            
+
             System.out.println();
-            
+
             System.out.println("ELIMINAR EN LA MITAD");
-            
-            
-            Bench.delete(10000,"10_mil_datos.txt");
+
+            Bench.delete(10000, "10_mil_datos.txt");
             Bench.delete(100000, "100_mil_datos.txt");
             Bench.delete(1000000, "1million.txt");
-            
+
             System.out.println();
-            
+
             System.out.println("INSERTAR AL FINAL");
-            
-            
-            Bench.append(10000,"10_mil_datos.txt");
+
+            Bench.append(10000, "10_mil_datos.txt");
             Bench.append(100000, "100_mil_datos.txt");
             Bench.append(1000000, "1million.txt");
-            
         }
+             */
+        Application.launch(args);
     }
-
+   
+    public void start(Stage primaryStage) throws Exception {
+        Singleton singleton = Singleton.getSingleton();
+        singleton.setStage(primaryStage);
+        Controlador controlador = new Controlador();
+        primaryStage.setTitle("Airline");
+        primaryStage.setScene(new Inicio().getScene());
+        primaryStage.show();
+    }
+/*
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+   */
 }

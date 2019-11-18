@@ -5,12 +5,10 @@
  */
 package businessLogic;
 
-import static businessLogic.ProTest.airline1;
-import static businessLogic.ProTest.destinations;
-import static businessLogic.ProTest.flights;
+
 import data.Airline;
 import data.Flight;
-import data.Plane;
+import data.Route;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,25 +22,30 @@ import static ui.UI.recorder;
  * @author danie
  */
 public class Administrator {
+    
+    private Airline airline;
 
     private SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
 
-    public Administrator() {
+    public Administrator(Airline airline) {
+        this.airline=airline;
     }
-   
-    public void addFlight(Airline airline, Plane plane) throws IOException, ParseException{
-        
-        String origen=UI.recorder("la ciudad de origen");
-        if(!destinations.contains(origen))destinations.add(origen);
-        String destination=UI.recorder("la ciudad de destino");
-        if(!destinations.contains(destination))destinations.add(destination);
-        int number=Integer.parseInt(UI.recorder("el número de vuelo"));
-        Date date=sdf.parse(UI.recorder("La fecha del vuelo como dd/mm/aaaa"));
-        Flight newFlight=new Flight(origen, destination, number, date, plane, airline);
-        flights.add(newFlight);
+
+    public Airline getAirline() {
+        return airline;
+    }
+
+    /*
+    public void addFlight() throws IOException, ParseException{ 
+        this.airline.addFlight(this);
         UI.AdminMenu(this);
     }
+    */
     
+    public void addFlight(Administrator defo, String origen, String destination, String num, String dat) throws IOException, ParseException{ 
+        this.airline.addFlight(this, origen, destination, num, dat);
+    }
+    /*
     public void addDestination() throws IOException, ParseException{
         
         String destination=UI.recorder("el destino que desea agregar");
@@ -58,19 +61,22 @@ public class Administrator {
         } catch (Exception e) {
         }                
         UI.AdminMenu(this);
-    }
+    }*/
     
     public LinkedList<Flight> findFlight(int key) throws IOException, ParseException{
         
         LinkedList<Flight> posFlights = new LinkedList<>();
+        
         switch (key) {
             
             case 1:
                 {
                     String origin = recorder("Ingrese la ciudad de origen");
                     String destination = recorder("Ingrese la ciudad de destino");
-                    for (Flight temp : flights) {
-                        if (origin.equalsIgnoreCase(temp.getOrigin()) && destination.equalsIgnoreCase(temp.getDestination())) {
+                    Route otherRoute=new Route(origin,destination);
+                    for (Flight temp : airline.getFlights()) {
+                        if ( otherRoute.equals(temp.getRoute()))
+                        {
                             posFlights.add(temp);
                         }
                     }       break;
@@ -79,7 +85,7 @@ public class Administrator {
                 {
                     String flightNum = recorder("Ingrese el número de vuelo");
                     int flNum = Integer.valueOf(flightNum);
-                    for (Flight temp : flights) {
+                    for (Flight temp : airline.getFlights()) {
                         if (flNum == temp.getNumberOfFlight()) {
                             posFlights.add(temp);
                         }
@@ -96,7 +102,7 @@ public class Administrator {
     }
     
     public void deleteFlight(int index) throws IOException, ParseException {
-        flights.remove(index);
+        airline.getFlights().remove(index);
     }
     
     public void modFlightInfo(int index,int key) throws IOException, ParseException { //Update
@@ -104,11 +110,11 @@ public class Administrator {
         switch (key) {
             case 1:
                 Date date=sdf.parse(UI.recorder("Nueva fecha del vuelo como dd/mm/aaaa"));
-                flights.get(index).setDate(date);
+                airline.getFlights().get(index).setDate(date);
                 break;
             case 2:
                 int newFlightNumber=Integer.parseInt(UI.recorder("Nuevo número del vuelo"));
-                flights.get(index).setNumberOfFlight(newFlightNumber);
+                airline.getFlights().get(index).setNumberOfFlight(newFlightNumber);
                 break;
             default:
                 break;
